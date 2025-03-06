@@ -14,7 +14,7 @@ class PostController extends Controller
         return response()->json($posts);
     }
 
-    // Tambah postingan baru
+    
     public function store(Request $request)
     {
         $request->validate([
@@ -27,5 +27,28 @@ class PostController extends Controller
 
         return response()->json($post, 201);
     }
-}
+
+        public function update(Request $request, $id)
+        {
+            $request->validate([
+                'title' => 'required|string|max:255',
+                'content' => 'required|string',
+            ]);
+
+            $post = Post::findOrFail($id);
+            $post->update($request->all());
+
+            return response()->json($post, 200);
+        }
+
+
+        public function destroy($id)
+        {
+            $post = Post::findOrFail($id);
+            $post->delete();
+
+            return response()->json(['message' => 'Post deleted successfully'], 200);
+        }
+
+        }
 
